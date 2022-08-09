@@ -1,5 +1,5 @@
 {
-  "name": "lightbox",
+  "name": "@carpenjk/lightbox",
   "version": "1.0.0",
   "description": "This is a lightbox for images.",
   "main": "lib/index.js",
