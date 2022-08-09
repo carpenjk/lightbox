@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { Portal } from 'react-portal'
 import ScrollLock from '@carpenjk/scroll-lock'
-import useTouch from '../hooks/UseTouch'
+import { useTouch } from '@carpenjk/hooks'
 import LightBoxMain from './LightboxMain'
 
 const Lightbox = (props) => {

@@ -39,6 +39,7 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
+    "@carpenjk/hooks": "git+https://git@github.com/carpenjk/hooks.git",
     "@carpenjk/prop-x": "^1.0.2",
     "@carpenjk/scroll-lock": "git+https://git@github.com/carpenjk/scroll-lock.git",
     "react": "^17.0.2",
