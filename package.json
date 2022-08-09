@@ -7,7 +7,7 @@
     "prebuild": "rimraf lib",
     "build": "babel src -d lib",
     "prepublish": "npm run build",
-    "preinstall": "npm run build",
+    "postinstall": "npm run build",
     "commit": "git-cz"
   },
   "repository": {
