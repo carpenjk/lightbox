@@ -8,8 +8,7 @@
     "build": "babel src -d lib",
     "prepublish": "npm run build",
     "postinstall": "npm run build",
-    "commit": "git-cz",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "commit": "git-cz"
   },
   "repository": {
     "type": "git",
