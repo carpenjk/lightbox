@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@carpenjk/prop-x": "^1.0.2",
-    "@carpenjk/scroll-lock": "github:carpenjk/scroll-lock",
+    "@carpenjk/scroll-lock": "git+https://git@github.com/carpenjk/scroll-lock.git",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "styled-components": "^5.1.1"
