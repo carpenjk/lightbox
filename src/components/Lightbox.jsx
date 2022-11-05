@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { Portal } from 'react-portal'
-import ScrollLock from '@carpenjk/scroll-lock'
+import ScrollLock from './other/ScrollLock'
 import { useTouch } from './hooks/useTouch'
 import LightBoxMain from './LightboxMain'
 
