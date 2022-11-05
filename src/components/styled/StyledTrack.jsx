@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { condition } from 'prop-x/css'
+import { condition } from '@carpenjk/prop-x/css'
 
 export default styled.div`
   display: inline-block;
