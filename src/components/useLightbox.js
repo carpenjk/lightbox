@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 
 const useLightbox = ({ images, photoIndex, isOpen }) => {
   const [lightbox, setLightbox] = useState({
@@ -7,12 +7,8 @@ const useLightbox = ({ images, photoIndex, isOpen }) => {
     isOpen
   })
 
-  function setImages (imgs) {
-    setLightbox((prev) => ({ ...prev, images: imgs }))
-  }
-
   //* ******** event handlers **************
-  function handleMoveNext () {
+  const handleMoveNext = useRef(() => {
     // calculate new index
     function updateIndexNext (prevIndex, imgs) {
       if (prevIndex < imgs.length - 1) {
@@ -25,9 +21,9 @@ const useLightbox = ({ images, photoIndex, isOpen }) => {
       ...prev,
       photoIndex: updateIndexNext(prev.photoIndex, prev.images)
     }))
-  }
+  }).current
 
-  function handleMovePrev () {
+  const handleMovePrev = useRef(() => {
     // calculate new index
     function updateIndexPrev (prevIndex) {
       if (prevIndex !== 0) {
@@ -40,39 +36,32 @@ const useLightbox = ({ images, photoIndex, isOpen }) => {
       ...prev,
       photoIndex: updateIndexPrev(prev.photoIndex)
     }))
-  }
+  }).current
 
-  function handlePhotoClick (i) {
+  const handlePhotoClick = useRef((i) => {
     setLightbox((prev) => ({ ...prev, photoIndex: i, isOpen: true }))
-  }
+  }).current
 
-  function handleLightboxClose (e) {
+  const handleLightboxClose = useRef((e) => {
     setLightbox((prev) => ({ ...prev, photoIndex: 0, isOpen: false }))
     e.stopPropagation()
-  }
+  }).current
 
-  function handleLightboxOpen () {
+  const handleLightboxOpen = useRef(() => {
     setLightbox((prev) => ({ ...prev, isOpen: true }))
-  }
-
-  const _handleLightboxClose = useCallback(handleLightboxClose, [])
-  const _handleLightboxOpen = useCallback(handleLightboxOpen, [])
-  const _handleMoveNext = useCallback(handleMoveNext, [])
-  const _handleMovePrev = useCallback(handleMovePrev, [])
-  const _handlePhotoClick = useCallback(handlePhotoClick, [])
-  const _setImages = useCallback(setImages, [])
+  }).current
 
   const lightboxControl = useRef({
-    handleLightboxClose: _handleLightboxClose,
-    handleLightboxOpen: _handleLightboxOpen,
-    handleMoveNext: _handleMoveNext,
-    handleMovePrev: _handleMovePrev,
-    handlePhotoClick: _handlePhotoClick,
-    setImages: _setImages
-  })
+    handleLightboxClose,
+    handleLightboxOpen,
+    handleMoveNext,
+    handleMovePrev,
+    handlePhotoClick
+  }).current
+
   return {
     lightbox,
-    lightboxControl: lightboxControl.current
+    lightboxControl
   }
 }
 
