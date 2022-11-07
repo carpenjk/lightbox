@@ -1,72 +1,90 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useLayoutEffect } from 'react'
 
-const useLightbox = ({ images, photoIndex, isOpen }) => {
-  const [lightbox, setLightbox] = useState({
-    images,
-    photoIndex,
-    isOpen
-  })
+const useLightbox = ({ images, preloadCount, openToIndex, openOnMount }) => {
+  const [isOpen, setIsOpen] = useState(openOnMount)
+  const [photoIndex, setPhotoIndex] = useState(openToIndex)
+  const [loadedImages, setLoadedImages] = useState(images.slice(0, photoIndex + preloadCount))
+  const [isOpening, setIsOpening] = useState(isOpen)
 
-  useEffect(() => setLightbox((prev) => ({
-    ...prev,
-    images,
-    photoIndex: 0
-  })), [images])
+  //* **************effects************** */
+  // preLoad Images
+  useEffect(() => {
+    setLoadedImages(images.slice(0, photoIndex + preloadCount))
+  }, [images, photoIndex, preloadCount]);
+
+  // turns transition off on slide for better opening effect
+  useLayoutEffect(() => {
+    if (isOpen) {
+      setIsOpening(true)
+    }
+  }, [isOpen])
+
+  // turns transition back on once open
+  useEffect(() => {
+    if (isOpening) {
+      setIsOpening(false)
+    }
+  }, [isOpening])
+
+  //reset to 0 if new set of images provided
+  useEffect(() => setPhotoIndex(0), [images])
 
   //* ******** event handlers **************
-  const handleMoveNext = useRef(() => {
-    // calculate new index
-    function updateIndexNext (prevIndex, imgs) {
-      if (prevIndex < imgs.length - 1) {
-        return prevIndex + 1
-      }
-      return prevIndex
-    }
-    // udate index state
-    setLightbox((prev) => ({
-      ...prev,
-      photoIndex: updateIndexNext(prev.photoIndex, prev.images)
-    }))
-  }).current
-
-  const handleMovePrev = useRef(() => {
-    // calculate new index
-    function updateIndexPrev (prevIndex) {
-      if (prevIndex !== 0) {
-        return prevIndex - 1
-      }
-      return prevIndex
-    }
-    // set index state
-    setLightbox((prev) => ({
-      ...prev,
-      photoIndex: updateIndexPrev(prev.photoIndex)
-    }))
-  }).current
+  const moveNext = useRef(() => setPhotoIndex(
+    (prev) =>  prev < images.length - 1 ? prev + 1 : prev)
+  ).current
+  const movePrev = useRef(() => setPhotoIndex((prev) =>  prev !== 0 ? prev - 1 : prev)).current
 
   const handlePhotoClick = useRef((i) => {
-    setLightbox((prev) => ({ ...prev, photoIndex: i, isOpen: true }))
-  }).current
+    if(i){
+      setPhotoIndex(i)
+    }
+    setIsOpen(true);
+  }
+  ).current
 
-  const handleLightboxClose = useRef((e) => {
-    setLightbox((prev) => ({ ...prev, photoIndex: 0, isOpen: false }))
+  const close = useRef((e) => {
+    setIsOpen(false);
+    setPhotoIndex(0);
     e.stopPropagation()
+  ).current
+
+  const open = useRef((i) => {
+    setLightbox((prev) => ({ ...prev, isOpen: true }))
+
   }).current
 
-  const handleLightboxOpen = useRef(() => {
-    setLightbox((prev) => ({ ...prev, isOpen: true }))
+  const handleKeyDown = useRef((e) => {
+    switch (e.key) {
+      case 'ArrowLeft':
+        movePrev(e)
+        break
+      case 'ArrowRight':
+        moveNext(e)
+        break
+      case 'Escape':
+        close(e)
+        break
+      default:
+        break
+    }
   }).current
 
   const lightboxControl = useRef({
-    handleLightboxClose,
-    handleLightboxOpen,
-    handleMoveNext,
-    handleMovePrev,
+    close,
+    open,
+    moveNext,
+    movePrev,
+    handleKeyDown,
     handlePhotoClick
   }).current
 
   return {
-    lightbox,
+    lightbox: {
+      isOpen,
+      photoIndex,
+      loadedImages
+    },
     lightboxControl
   }
 }
