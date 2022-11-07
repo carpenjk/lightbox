@@ -17,7 +17,7 @@ const Lightbox = (props) => {
   } = props
 
   const lightboxRef = useLightboxRef()
-  const { lightbox, lightboxControl } = useLightbox({ images, isOpen, preloadCount, openToIndex, openOnMount })
+  const { lightbox, lightboxControl } = useLightbox({ images, preloadCount, openToIndex, openOnMount })
   const touch = useTouch({ onTouchLeft: lightboxControl.moveNext, onTouchRight: lightboxControl.movePrev })
 
   if (lightbox.isOpen) {

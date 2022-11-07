@@ -10,7 +10,7 @@ const useLightbox = ({ images, preloadCount, openToIndex, openOnMount }) => {
   // preLoad Images
   useEffect(() => {
     setLoadedImages(images.slice(0, photoIndex + preloadCount))
-  }, [images, photoIndex, preloadCount]);
+  }, [images, photoIndex, preloadCount])
 
   // turns transition off on slide for better opening effect
   useLayoutEffect(() => {
@@ -26,33 +26,29 @@ const useLightbox = ({ images, preloadCount, openToIndex, openOnMount }) => {
     }
   }, [isOpening])
 
-  //reset to 0 if new set of images provided
+  // reset to 0 if new set of images provided
   useEffect(() => setPhotoIndex(0), [images])
 
   //* ******** event handlers **************
   const moveNext = useRef(() => setPhotoIndex(
-    (prev) =>  prev < images.length - 1 ? prev + 1 : prev)
+    (prev) => prev < images.length - 1 ? prev + 1 : prev)
   ).current
-  const movePrev = useRef(() => setPhotoIndex((prev) =>  prev !== 0 ? prev - 1 : prev)).current
-
-  const handlePhotoClick = useRef((i) => {
-    if(i){
-      setPhotoIndex(i)
-    }
-    setIsOpen(true);
-  }
-  ).current
+  const movePrev = useRef(() => setPhotoIndex((prev) => prev !== 0 ? prev - 1 : prev)).current
 
   const close = useRef((e) => {
-    setIsOpen(false);
-    setPhotoIndex(0);
+    setIsOpen(false)
+    setPhotoIndex(0)
     e.stopPropagation()
-  ).current
+  }).current
 
   const open = useRef((i) => {
-    setLightbox((prev) => ({ ...prev, isOpen: true }))
-
+    if (i) {
+      setPhotoIndex(i)
+    }
+    setIsOpen(true)
   }).current
+
+  const handlePhotoClick = useRef((i) => open(i)).current
 
   const handleKeyDown = useRef((e) => {
     switch (e.key) {
