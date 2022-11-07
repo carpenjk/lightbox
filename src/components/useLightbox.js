@@ -79,7 +79,10 @@ const useLightbox = ({ images, preloadCount, openToIndex = 0, openOnMount = fals
   const moveNext = useRef(() => control({ type: 'next' })).current
   const movePrev = useRef(() => control({ type: 'prev' })).current
   const close = useRef(() => control({ type: 'close' })).current
-  const open = useRef((i) => control({ type: 'open', payload: i })).current
+  const open = useRef((i) => {
+    const payload = Number.isInteger(i) ? i : undefined
+    return control({ type: 'open', payload })
+  }).current
 
   const handlePhotoClick = useRef((i) => open(i)).current
 
