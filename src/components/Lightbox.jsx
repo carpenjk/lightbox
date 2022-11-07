@@ -46,7 +46,6 @@ const Lightbox = (props) => {
           loadedImages={lightboxState.loadedImages}
           showNavArrows={showNavArrows}
           lightboxRef={lightboxRef}
-          onClick={lightboxControl.open}
           onClose={lightboxControl.close}
           onMoveNext={lightboxControl.moveNext}
           onMovePrev={lightboxControl.movePrev}

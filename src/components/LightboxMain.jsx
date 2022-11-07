@@ -18,7 +18,6 @@ const LightBoxMain = (props) => {
     loadedImages,
     showNavArrows,
     lightboxRef,
-    onClick,
     onClose,
     onKeyDown,
     onMoveNext,
@@ -64,7 +63,6 @@ const LightBoxMain = (props) => {
     <StyledLightboxMain
       isOpen={isOpen}
       ref={lightboxRef}
-      onClick={onClick}
       onKeyDown={onKeyDown}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
