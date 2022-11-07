@@ -26,7 +26,8 @@ const useLightbox = ({ images, preloadCount, openToIndex = 0, openOnMount = fals
         return {
           ...state,
           isOpen: true,
-          photoIndex: action.payload ? action.payload : state.photoIndex
+          photoIndex: action.payload ? action.payload : state.photoIndex,
+          loadedImages: images.slice(0, state.photoIndex + preloadCount
         }
       case 'close':
         return {
