@@ -1,52 +1,79 @@
-import { useState, useRef, useEffect, useLayoutEffect } from 'react'
+import { useRef, useReducer } from 'react'
 
 const useLightbox = ({ images, preloadCount, openToIndex, openOnMount }) => {
-  const [isOpen, setIsOpen] = useState(openOnMount)
-  const [photoIndex, setPhotoIndex] = useState(openToIndex)
-  const [loadedImages, setLoadedImages] = useState(images.slice(0, photoIndex + preloadCount))
-  const [isOpening, setIsOpening] = useState(isOpen)
+  // const [isOpen, setIsOpen] = useState(openOnMount)
+  // const [photoIndex, setPhotoIndex] = useState(openToIndex)
+  // const [loadedImages, setLoadedImages] = useState(images.slice(0, photoIndex + preloadCount))
+
+  function reducer (state, action) {
+    switch (action.type) {
+      case 'next':
+        return {
+          photoIndex: state.photoIndex < images.length - 1
+            ? state.photoIndex + 1
+            : state.photoIndex,
+          loadedImages: images.slice(0, state.photoIndex + preloadCount)
+        }
+      case 'prev':
+        return {
+          photoIndex: state.photoIndex !== 0
+            ? state.photoIndex - 1
+            : state.photoIndex
+        }
+      case 'open':
+        return {
+          isOpen: true,
+          photoIndex: action.payload
+        }
+      case 'close':
+        return {
+          isOpen: false,
+          photoIndex: 0
+        }
+    }
+  }
+
+  const [state, control] = useReducer(
+    reducer,
+    {
+      isOpen: openOnMount,
+      photoIndex: openToIndex,
+      loadedImages: images.slice(0, openToIndex + preloadCount)
+    })
 
   //* **************effects************** */
   // preLoad Images
-  useEffect(() => {
-    setLoadedImages(images.slice(0, photoIndex + preloadCount))
-  }, [images, photoIndex, preloadCount])
-
-  // turns transition off on slide for better opening effect
-  useLayoutEffect(() => {
-    if (isOpen) {
-      setIsOpening(true)
-    }
-  }, [isOpen])
-
-  // turns transition back on once open
-  useEffect(() => {
-    if (isOpening) {
-      setIsOpening(false)
-    }
-  }, [isOpening])
+  // useEffect(() => {
+  //   setLoadedImages(images.slice(0, photoIndex + preloadCount))
+  // }, [images, photoIndex, preloadCount])
 
   // reset to 0 if new set of images provided
-  useEffect(() => setPhotoIndex(0), [images])
+  // useEffect(() => setPhotoIndex(0), [images])
 
   //* ******** event handlers **************
-  const moveNext = useRef(() => setPhotoIndex(
-    (prev) => prev < images.length - 1 ? prev + 1 : prev)
-  ).current
-  const movePrev = useRef(() => setPhotoIndex((prev) => prev !== 0 ? prev - 1 : prev)).current
+  // const moveNext = useRef(() => setPhotoIndex(
+  //   (prev) => prev < images.length - 1 ? prev + 1 : prev)
+  // ).current
 
-  const close = useRef((e) => {
-    setIsOpen(false)
-    setPhotoIndex(0)
-    e.stopPropagation()
-  }).current
+  // const movePrev = useRef(() => setPhotoIndex((prev) => prev !== 0 ? prev - 1 : prev)).current
 
-  const open = useRef((i) => {
-    if (i) {
-      setPhotoIndex(i)
-    }
-    setIsOpen(true)
-  }).current
+  // const close = useRef((e) => {
+  //   setIsOpen(false)
+  //   setPhotoIndex(0)
+  //   e.stopPropagation()
+  // }).current
+
+  // const open = useRef((i) => {
+  //   if (i) {
+  //     setPhotoIndex(i)
+  //   }
+  //   setIsOpen(true)
+  // }).current
+
+  const moveNext = useRef(() => control({ type: 'next' })).current
+  const movePrev = useRef(() => control({ type: 'prev' })).current
+  const close = useRef(() => control({ type: 'close' })).current
+  const open = useRef((i) => control({ type: 'open', payload: i })).current
 
   const handlePhotoClick = useRef((i) => open(i)).current
 
@@ -76,11 +103,7 @@ const useLightbox = ({ images, preloadCount, openToIndex, openOnMount }) => {
   }).current
 
   return {
-    lightbox: {
-      isOpen,
-      photoIndex,
-      loadedImages
-    },
+    lightboxState: state,
     lightboxControl
   }
 }

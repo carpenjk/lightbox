@@ -1,42 +1,56 @@
-import React from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Portal } from 'react-portal'
 import ScrollLock from './other/ScrollLock'
 import useTouch from './hooks/useTouch'
 import LightBoxMain from './LightboxMain'
-import useLightbox from './useLightbox'
 import useLightboxRef from './hooks/useLightboxRef'
 
 const Lightbox = (props) => {
   const {
-    images,
-    preloadCount,
-    openToIndex,
-    openOnMount = false,
+    // images,
+    // preloadCount,
+    // openToIndex,
     imgCount,
-    showNavArrows = true
+    showNavArrows = true,
+    lightboxState,
+    lightboxControl
   } = props
 
   const lightboxRef = useLightboxRef()
-  const { lightbox, lightboxControl } = useLightbox({ images, preloadCount, openToIndex, openOnMount })
+  const [isOpening, setIsOpening] = useState(lightboxState.isOpen)
   const touch = useTouch({ onTouchLeft: lightboxControl.moveNext, onTouchRight: lightboxControl.movePrev })
 
-  if (lightbox.isOpen) {
+  // turns transition off on slide for better opening effect
+  useLayoutEffect(() => {
+    if (lightboxState.isOpen) {
+      setIsOpening(true)
+    }
+  }, [lightboxState.isOpen])
+
+  // turns transition back on once open
+  useEffect(() => {
+    if (isOpening) {
+      setIsOpening(false)
+    }
+  }, [isOpening])
+
+  if (lightboxState.isOpen) {
     return (
-      <Portal isOpen={lightbox.isOpen}>
+      <Portal isOpen={lightboxState.isOpen}>
         <ScrollLock scrollNode={lightboxRef} reserveScrollBarGap />
         <LightBoxMain
-          currIndex={lightbox.photoIndex}
-          isOpen={lightbox.isOpen}
-          isOpening={lightbox.isOpening}
+          currIndex={lightboxState.photoIndex}
+          isOpen={lightboxState.isOpen}
+          isOpening={isOpening}
           imgCount={imgCount}
-          loadedImages={lightbox.loadedImages}
+          loadedImages={lightboxState.loadedImages}
           showNavArrows={showNavArrows}
           lightboxRef={lightboxRef}
-          onClick={lightbox.open}
-          onClose={lightbox.close}
-          onMoveNext={lightbox.moveNext}
-          onMovePrev={lightbox.movePrev}
-          onKeyDown={lightbox.handleKeyDown}
+          onClick={lightboxControl.open}
+          onClose={lightboxControl.close}
+          onMoveNext={lightboxControl.moveNext}
+          onMovePrev={lightboxControl.movePrev}
+          onKeyDown={lightboxControl.handleKeyDown}
           onTouchEnd={touch.onTouchEnd}
           onTouchStart={touch.onTouchStart}
           tabIndex="0"
