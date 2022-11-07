@@ -1,6 +1,6 @@
 import { useRef, useReducer } from 'react'
 
-const useLightbox = ({ images, preloadCount, openToIndex, openOnMount }) => {
+const useLightbox = ({ images, preloadCount, openToIndex = 0, openOnMount = false }) => {
   // const [isOpen, setIsOpen] = useState(openOnMount)
   // const [photoIndex, setPhotoIndex] = useState(openToIndex)
   // const [loadedImages, setLoadedImages] = useState(images.slice(0, photoIndex + preloadCount))
@@ -9,6 +9,7 @@ const useLightbox = ({ images, preloadCount, openToIndex, openOnMount }) => {
     switch (action.type) {
       case 'next':
         return {
+          ...state,
           photoIndex: state.photoIndex < images.length - 1
             ? state.photoIndex + 1
             : state.photoIndex,
@@ -16,20 +17,25 @@ const useLightbox = ({ images, preloadCount, openToIndex, openOnMount }) => {
         }
       case 'prev':
         return {
+          ...state,
           photoIndex: state.photoIndex !== 0
             ? state.photoIndex - 1
             : state.photoIndex
         }
       case 'open':
         return {
+          ...state,
           isOpen: true,
           photoIndex: action.payload
         }
       case 'close':
         return {
+          ...state,
           isOpen: false,
           photoIndex: 0
         }
+      default:
+        throw new Error()
     }
   }
 
