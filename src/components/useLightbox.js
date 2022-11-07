@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 const useLightbox = ({ images, photoIndex, isOpen }) => {
   const [lightbox, setLightbox] = useState({
@@ -6,6 +6,12 @@ const useLightbox = ({ images, photoIndex, isOpen }) => {
     photoIndex,
     isOpen
   })
+
+  useEffect(() => setLightbox((prev) => ({
+    ...prev,
+    images,
+    photoIndex: 0
+  })), [images])
 
   //* ******** event handlers **************
   const handleMoveNext = useRef(() => {
