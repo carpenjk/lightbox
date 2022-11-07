@@ -13,7 +13,6 @@ const LightBoxMain = (props) => {
   const {
     currIndex,
     isOpen,
-    isOpening,
     imgCount,
     loadedImages,
     showNavArrows,
@@ -86,7 +85,6 @@ const LightBoxMain = (props) => {
             slideIndex={currIndex}
             count={imgCount}
             isOpen={isOpen}
-            isOpening={isOpening}
           >
             {loadedImages &&
               loadedImages.map((img) => (

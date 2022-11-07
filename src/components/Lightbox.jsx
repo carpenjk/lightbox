@@ -17,22 +17,7 @@ const Lightbox = (props) => {
   } = props
 
   const lightboxRef = useLightboxRef(lightboxState.isOpen)
-  const [isOpening, setIsOpening] = useState(lightboxState.isOpen)
   const touch = useTouch({ onTouchLeft: lightboxControl.moveNext, onTouchRight: lightboxControl.movePrev })
-
-  // turns transition off on slide for better opening effect
-  useLayoutEffect(() => {
-    if (lightboxState.isOpen) {
-      setIsOpening(true)
-    }
-  }, [lightboxState.isOpen])
-
-  // turns transition back on once open
-  useEffect(() => {
-    if (isOpening) {
-      setIsOpening(false)
-    }
-  }, [isOpening])
 
   if (lightboxState.isOpen) {
     return (
@@ -41,7 +26,6 @@ const Lightbox = (props) => {
         <LightBoxMain
           currIndex={lightboxState.photoIndex}
           isOpen={lightboxState.isOpen}
-          isOpening={isOpening}
           imgCount={imgCount}
           loadedImages={lightboxState.loadedImages}
           showNavArrows={showNavArrows}

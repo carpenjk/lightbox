@@ -12,10 +12,6 @@ export default styled.div`
   transform: translate(${({ count, slideIndex }) => slideIndex * (1 / count) * -100}%);
   transition: transform 1s;
 
-  ${condition('isOpening')`
-    transition: none;
-  `}
-
   > div {
     display: inline-block;
     position: relative;
