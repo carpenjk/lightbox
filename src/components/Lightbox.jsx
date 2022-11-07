@@ -16,7 +16,7 @@ const Lightbox = (props) => {
     lightboxControl
   } = props
 
-  const lightboxRef = useLightboxRef()
+  const lightboxRef = useLightboxRef(lightboxState.isOpen)
   const [isOpening, setIsOpening] = useState(lightboxState.isOpen)
   const touch = useTouch({ onTouchLeft: lightboxControl.moveNext, onTouchRight: lightboxControl.movePrev })
 
