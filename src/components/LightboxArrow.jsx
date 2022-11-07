@@ -8,12 +8,13 @@ const StyledArrowContainer = styled.button`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height 100%;
+  height: 100%;
   border-radius: 50%;
   border: 2px solid white;
   background: transparent;
   color: inherit;
   opacity: ${getProp('opacity')};
+  cursor: pointer;
 
   &:hover {
     background: rgb(74, 74, 74);
