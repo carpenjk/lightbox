@@ -9,6 +9,7 @@ export default styled.button`
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
+  border: none;
   border-radius: 3px;
 
   &:hover {
