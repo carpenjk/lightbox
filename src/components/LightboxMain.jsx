@@ -9,28 +9,34 @@ import StyledInnerContainer from './styled/StyledInnerContainer'
 import StyledTrack from './styled/StyledTrack'
 import StyledArrowWrapper from './styled/StyledArrowWrapper'
 
-const LightBoxMain = (props) => {
+const LightBoxMain = ({
+  lightboxState,
+  lightboxControl,
+  showNavArrows,
+  lightboxRef,
+  onTouchStart,
+  onTouchEnd
+}) => {
   const {
-    currIndex,
+    close,
+    handleKeyDown,
+    moveNext,
+    movePrev
+  } = lightboxControl
+
+  const {
+    photoIndex,
     isOpen,
-    imgCount,
-    loadedImages,
-    showNavArrows,
-    lightboxRef,
-    onClose,
-    onKeyDown,
-    onMoveNext,
-    onMovePrev,
-    onTouchEnd,
-    onTouchStart
-  } = props
+    count,
+    loadedImages
+  } = lightboxState
 
   const [isHovered, setIsHovered] = useState(false)
   const leftButtonRef = useRef(null)
   const rightButtonRef = useRef(null)
 
-  const isLeftButtonDisabled = currIndex === 0
-  const isRightButtonDisabled = currIndex === imgCount - 1
+  const isLeftButtonDisabled = photoIndex === 0
+  const isRightButtonDisabled = photoIndex === count - 1
 
   useEffect(() => {
     if (isLeftButtonDisabled && rightButtonRef.current) {
@@ -62,7 +68,7 @@ const LightBoxMain = (props) => {
     <StyledLightboxMain
       isOpen={isOpen}
       ref={lightboxRef}
-      onKeyDown={onKeyDown}
+      onKeyDown={handleKeyDown}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
       tabIndex="0"
@@ -73,17 +79,17 @@ const LightBoxMain = (props) => {
         {isOpen && (
           <>
             <LightboxHeader
-              currIndex={currIndex}
-              imgCount={imgCount}
-              onClose={onClose}
+              currIndex={photoIndex}
+              imgCount={count}
+              onClose={close}
             />
-            <LightboxCounter currIndex={currIndex} imgCount={imgCount} />
+            <LightboxCounter currIndex={photoIndex} imgCount={count} />
           </>
         )}
         <StyledInnerContainer isOpen={isOpen}>
           <StyledTrack
-            slideIndex={currIndex}
-            count={imgCount}
+            slideIndex={photoIndex}
+            count={count}
             isOpen={isOpen}
           >
             {loadedImages &&
@@ -99,7 +105,7 @@ const LightBoxMain = (props) => {
             <StyledArrowWrapper left="calc(0.5% + 10px)">
               <LightboxArrow
                 direction="left"
-                onClick={onMovePrev}
+                onClick={movePrev}
                 disabled={isLeftButtonDisabled}
                 buttonRef={leftButtonRef}
                 hide={hideArrows}
@@ -108,7 +114,7 @@ const LightBoxMain = (props) => {
             <StyledArrowWrapper right="calc(0.5% + 10px)">
               <LightboxArrow
                 direction="right"
-                onClick={onMoveNext}
+                onClick={moveNext}
                 disabled={isRightButtonDisabled}
                 buttonRef={rightButtonRef}
                 hide={hideArrows}

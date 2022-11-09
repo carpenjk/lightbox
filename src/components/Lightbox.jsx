@@ -7,9 +7,6 @@ import useLightboxRef from './hooks/useLightboxRef'
 
 const Lightbox = (props) => {
   const {
-    // images,
-    // preloadCount,
-    // openToIndex,
     showNavArrows = true,
     lightboxState,
     lightboxControl
@@ -23,19 +20,12 @@ const Lightbox = (props) => {
       <Portal isOpen={lightboxState.isOpen}>
         <ScrollLock scrollNode={lightboxRef} reserveScrollBarGap />
         <LightBoxMain
-          currIndex={lightboxState.photoIndex}
-          isOpen={lightboxState.isOpen}
-          imgCount={lightboxState.count}
-          loadedImages={lightboxState.loadedImages}
+          lightboxControl={lightboxControl}
+          lightboxState={lightboxState}
           showNavArrows={showNavArrows}
           lightboxRef={lightboxRef}
-          onClose={lightboxControl.close}
-          onMoveNext={lightboxControl.moveNext}
-          onMovePrev={lightboxControl.movePrev}
-          onKeyDown={lightboxControl.handleKeyDown}
           onTouchEnd={touch.onTouchEnd}
           onTouchStart={touch.onTouchStart}
-          tabIndex="0"
         />
       </Portal>
     )
