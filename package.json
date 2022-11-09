@@ -1,17 +1,18 @@
 {
   "name": "@carpenjk/lightbox",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "This is a lightbox for images.",
   "main": "lib/index.js",
   "scripts": {
     "prebuild": "rimraf lib",
     "build": "babel src -d lib",
     "prepublish": "npm run build",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/carpenjk/lightbox.git"
+    "url": "https://github.com/carpenjk/lightbox.git"
   },
   "keywords": [
     "lightbox",
@@ -36,15 +37,16 @@
     "eslint-plugin-n": "^15.2.4",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.30.1",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "semantic-release": "^19.0.5"
   },
   "peerDependencies": {
     "@carpenjk/prop-x": "^2.0.3",
     "body-scroll-lock": "^3.1.5",
     "react": "17 - 18",
     "react-dom": "17 - 18",
-    "styled-components": "^5.1.1",
-    "react-portal": "^4.2.2"
+    "react-portal": "^4.2.2",
+    "styled-components": "^5.1.1"
   },
   "config": {
     "commitizen": {
