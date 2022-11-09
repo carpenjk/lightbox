@@ -1,6 +1,20 @@
 import { useRef, useReducer } from 'react'
 
 const useLightbox = ({ images, preloadCount, openToIndex = 0, openOnMount = false }) => {
+  function getLoadedImages (imgs, n, i) {
+    return imgs.slice(0, i + n)
+  }
+
+  // set or create initial values
+  function initValues ({ images, openOnMount, openToIndex, preloadCount }) {
+    return {
+      isOpen: openOnMount,
+      photoIndex: openToIndex,
+      loadedImages: getLoadedImages(images, preloadCount, openToIndex),
+      count: images.length
+    }
+  }
+
   function reducer (state, action) {
     switch (action.type) {
       case 'next':
@@ -9,7 +23,7 @@ const useLightbox = ({ images, preloadCount, openToIndex = 0, openOnMount = fals
           photoIndex: state.photoIndex < images.length - 1
             ? state.photoIndex + 1
             : state.photoIndex,
-          loadedImages: images.slice(0, state.photoIndex + preloadCount)
+          loadedImages: getLoadedImages(images, preloadCount, state.photoIndex)
         }
       case 'prev':
         return {
@@ -24,7 +38,7 @@ const useLightbox = ({ images, preloadCount, openToIndex = 0, openOnMount = fals
           ...state,
           isOpen: true,
           photoIndex,
-          loadedImages: images.slice(0, photoIndex + preloadCount)
+          loadedImages: getLoadedImages(images, preloadCount, photoIndex)
         }
       }
       case 'close':
@@ -33,6 +47,15 @@ const useLightbox = ({ images, preloadCount, openToIndex = 0, openOnMount = fals
           isOpen: false,
           photoIndex: 0
         }
+      case 'set': {
+        const { payload } = action
+        return initValues({
+          images: payload.images || state.images,
+          openOnMount: payload.openOnMount || state.openOnMount,
+          openToIndex: payload.openToIndex || state.openToIndex,
+          preloadCount: payload.preloadCount || state.preloadCount
+        })
+      }
       default:
         throw new Error()
     }
@@ -40,15 +63,17 @@ const useLightbox = ({ images, preloadCount, openToIndex = 0, openOnMount = fals
 
   const [state, control] = useReducer(
     reducer,
-    {
-      isOpen: openOnMount,
-      photoIndex: openToIndex,
-      loadedImages: images.slice(0, openToIndex + preloadCount)
-    })
+    initValues({ images, openOnMount, openToIndex, preloadCount })
+  )
 
+  // control api functions
   const moveNext = useRef(() => control({ type: 'next' })).current
   const movePrev = useRef(() => control({ type: 'prev' })).current
   const close = useRef(() => control({ type: 'close' })).current
+  const setImages = useRef((props) => control({
+    type: 'set',
+    payload: props
+  })).current
   const open = useRef((i) => {
     const payload = Number.isInteger(i) ? i : undefined
     return control({ type: 'open', payload })
@@ -77,6 +102,7 @@ const useLightbox = ({ images, preloadCount, openToIndex = 0, openOnMount = fals
     open,
     moveNext,
     movePrev,
+    setImages,
     handleKeyDown,
     handlePhotoClick
   }).current
