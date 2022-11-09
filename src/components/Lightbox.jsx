@@ -10,7 +10,6 @@ const Lightbox = (props) => {
     // images,
     // preloadCount,
     // openToIndex,
-    imgCount,
     showNavArrows = true,
     lightboxState,
     lightboxControl
@@ -26,7 +25,7 @@ const Lightbox = (props) => {
         <LightBoxMain
           currIndex={lightboxState.photoIndex}
           isOpen={lightboxState.isOpen}
-          imgCount={imgCount}
+          imgCount={lightboxState.count}
           loadedImages={lightboxState.loadedImages}
           showNavArrows={showNavArrows}
           lightboxRef={lightboxRef}
