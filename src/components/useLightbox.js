@@ -49,11 +49,14 @@ const useLightbox = ({ images, preloadCount, openToIndex = 0, openOnMount = fals
         }
       case 'set': {
         const { payload } = action
+        const _openOnMount = payload.openOnMount !== undefined ? payload.openOnMount : state.openOnMount
+        const _openToIndex = payload.openToIndex !== undefined ? payload.openToIndex : state.openToIndex
+        const _preloadCount = payload.preloadCount !== undefined ? payload.preloadCount : state.preloadCount
         return initValues({
           images: payload.images || state.images,
-          openOnMount: payload.openOnMount || state.openOnMount,
-          openToIndex: payload.openToIndex || state.openToIndex,
-          preloadCount: payload.preloadCount || state.preloadCount
+          openOnMount: _openOnMount,
+          openToIndex: _openToIndex,
+          preloadCount: _preloadCount
         })
       }
       default:
