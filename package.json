@@ -35,7 +35,6 @@
     "@babel/core": "^7.18.10",
     "@babel/preset-env": "^7.18.10",
     "@babel/preset-react": "^7.16.0",
-    "@carpenjk/prop-x": "^3.0.1",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.21.0",
     "eslint-config-standard": "^17.0.0",
